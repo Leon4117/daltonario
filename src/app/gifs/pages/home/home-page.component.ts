@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GifsService } from '../../services/gifs.service';
+import { OpenAIService } from '../../services/openai.service';
 import { Gif } from '../../interfaces/gifs.interfaces';
 
 @Component({
@@ -8,7 +9,7 @@ import { Gif } from '../../interfaces/gifs.interfaces';
 })
 export class HomePageComponent {
 
-  constructor( private gifsService: GifsService ) {}
+  constructor( private gifsService: GifsService, private openaiService: OpenAIService) {}
 
   get gifs(): Gif[] {
     return this.gifsService.gifList;
