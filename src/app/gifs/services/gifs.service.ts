@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SearchResponse, Gif } from '../interfaces/gifs.interfaces';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GifsService {
 
   public gifList: Gif[] = [];
+  public actualPalabra: string = '';
 
   private _tagsHistory: string[] = [];
   private apiKey:       string = 'Q8b3LSIao7dtrL2OldM5V1x3AHDmAaeT';
@@ -22,7 +24,6 @@ export class GifsService {
 
   private organizeHistory(tag: string) {
     tag = tag.toLowerCase();
-
     if ( this._tagsHistory.includes( tag ) ) {
       this._tagsHistory = this._tagsHistory.filter( (oldTag) => oldTag !== tag )
     }
@@ -48,11 +49,11 @@ export class GifsService {
 
   searchTag( tag: string ):void {
     if ( tag.length === 0 ) return;
+    this.actualPalabra = tag;
     this.organizeHistory(tag);
-
     const params = new HttpParams()
       .set('api_key', this.apiKey )
-      .set('limit', '10' )
+      .set('limit', '4' ) //Solo aparecen 4 Gifs
       .set('q', tag )
 
     this.http.get<SearchResponse>(`${ this.serviceUrl }/search`, { params })
@@ -62,13 +63,16 @@ export class GifsService {
         // console.log({ gifs: this.gifList });
 
       });
-
-
-
-
-
-
   }
 
 
+  private valorCompartido = new BehaviorSubject<string>('');
+
+  enviarValor(valor: string): void {
+    this.valorCompartido.next(valor);
+  }
+
+  obtenerValor(): Observable<string> {
+    return this.valorCompartido.asObservable();
+  }
 }

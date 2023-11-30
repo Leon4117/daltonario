@@ -4,25 +4,17 @@ import { OpenAIService } from '../../services/openai.service';
 
 @Component({
   selector: 'gifs-search-box',
-  template: `
-    <h5>Buscar:</h5>
-    <input type="text"
-      class="form-control"
-      placeholder="Buscar gifs..."
-      (keyup.enter)="searchTag()"
-      #txtTagInput
-    ><br>
-    <h1>{{text}}</h1>
-    <h5>{{result}}</h5>
-  `
+  templateUrl: './search-box.component.html',
+
 })
 
 export class SearchBoxComponent  {
 
   @ViewChild('txtTagInput')
   public tagInput!: ElementRef<HTMLInputElement>;
-  text = '';
-  result = '';
+  palabra = '';
+  definicion = '';
+  traduccionPalabra = '';
 
   constructor( private gifsService: GifsService, private openaiService: OpenAIService ) { }
 
@@ -30,10 +22,8 @@ export class SearchBoxComponent  {
   // searchTag( newTag: string ) {
   searchTag() {
     const newTag = this.tagInput.nativeElement.value;
-    this.text = this.tagInput.nativeElement.value;
-
     this.gifsService.searchTag(newTag);
-
+    this.palabra = this.gifsService.actualPalabra;
     this.tagInput.nativeElement.value = '';
 
   }
@@ -42,8 +32,14 @@ export class SearchBoxComponent  {
     const prompt = 'Dame la definición y la traducción en ingles de: ' + this.tagInput.nativeElement.value;
     this.openaiService.generateCompletion(prompt).subscribe((data) => {
       console.log(data)
-      this.result = data.toString();
+      //this.result = data.toString();
     });
   }
 
+    ngOnInit(): void {
+      // Suscribirse al observable para recibir actualizaciones
+      this.gifsService.obtenerValor().subscribe((valor) => {
+      this.palabra = valor;
+    });
+  }
 }

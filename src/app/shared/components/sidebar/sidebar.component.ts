@@ -17,6 +17,10 @@ export class SidebarComponent {
 
   searchTag( tag: string ):void {
     this.gifsService.searchTag( tag );
+    this.enviarValor(tag);
   }
 
+  enviarValor(tag: string): void {
+    this.gifsService.enviarValor(tag);
+  }
 }

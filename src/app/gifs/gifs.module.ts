@@ -7,6 +7,7 @@ import { CardComponent } from './components/card/card.component';
 import { CardListComponent } from './components/card-list/card-list.component';
 import { HomePageComponent } from './pages/home/home-page.component';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
+import { TraduccionComponent } from './components/traduccion/traduccion.component';
 
 
 @NgModule({
@@ -14,11 +15,11 @@ import { SearchBoxComponent } from './components/search-box/search-box.component
     CardComponent,
     CardListComponent,
     HomePageComponent,
-    SearchBoxComponent,
+    SearchBoxComponent
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [
     HomePageComponent,
